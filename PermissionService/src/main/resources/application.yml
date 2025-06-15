@@ -1,0 +1,59 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: PermissionService
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      discovery:
+        namespace: dev
+        group:  authority
+    profiles:
+      active: dev
+  shardingsphere:
+    datasource:
+      names: ds0, ds1
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/authority_permission_db_0?serverTimezone=UTC&useSSL=false
+        username: root
+        password: 2004zyta
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/authority_permission_db_1?serverTimezone=UTC&useSSL=false
+        username: root
+        password: 2004zyta
+
+    rules:
+      sharding:
+        tables:
+          user_roles:
+            actual-data-nodes: ds$->{0..1}.user_roles_$->{0..4}
+            table-strategy:
+              standard:
+                sharding-column: user_id
+                sharding-algorithm-name: user_inline
+        broadcast-tables:
+          - roles
+
+        default-database-strategy:
+          standard:
+            sharding-column: user_id
+            sharding-algorithm-name: database_inline
+
+        sharding-algorithms:
+          user_inline:
+            type: INLINE
+            props:
+              algorithm-expression: user_roles_$->{user_id % 5}
+          database_inline:
+            type: INLINE
+            props:
+              algorithm-expression: ds$->{user_id % 2}
+
