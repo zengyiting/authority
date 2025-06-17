@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * 
- * @TableName user_roles_0
+ * @TableName user_roles
  */
 @TableName(value ="user_roles")
 public class UserRoles {
