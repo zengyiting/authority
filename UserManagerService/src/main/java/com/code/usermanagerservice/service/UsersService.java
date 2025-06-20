@@ -1,6 +1,8 @@
 package com.code.usermanagerservice.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.code.usermanagerservice.model.dto.UserRegisterRequest;
+import com.code.usermanagerservice.model.dto.UserSmsRequest;
 import com.code.usermanagerservice.model.entity.User;
 
 
@@ -11,5 +13,7 @@ import com.code.usermanagerservice.model.entity.User;
 */
 public interface UsersService extends IService<User> {
 
+    public  void sendSMS(UserSmsRequest userSmsRequest);
+    public  void register(UserRegisterRequest userRegisterRequest);
 
 }
