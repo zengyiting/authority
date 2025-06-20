@@ -16,7 +16,7 @@ spring:
       active: dev
   shardingsphere:
     datasource:
-      names: ds0, ds1
+      names: ds0, ds1, ds2
       ds0:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
@@ -29,9 +29,16 @@ spring:
         url: jdbc:mysql://localhost:3306/authority_users_db_1?serverTimezone=UTC&useSSL=false
         username: root
         password: 2004zyta
+      ds2:
+          type: com.zaxxer.hikari.HikariDataSource
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/authority_common?serverTimezone=UTC&useSSL=false
+          username: root
+          password: 2004zyta
 
     rules:
       sharding:
+        default-data-source-name: ds2
         tables:
           users:
             actual-data-nodes: ds$->{0..1}.users_$->{0..4}
@@ -61,3 +68,39 @@ spring:
         key-generators:
           snowflake:
             type: SNOWFLAKE
+  redis:
+    host: 192.168.253.153
+    port: 6379
+    password: 2004zyta
+  rabbitmq:
+    host: 192.168.253.153       # 或你的RabbitMQ地址
+    port: 5672
+    username: guest
+    password: guest
+
+seata:
+  enabled: true
+  enable-auto-data-source-proxy: false  # 禁用自动代理数据源，解决报错
+  application-id: ${spring.application.name}
+  tx-service-group: user-manager-service-group
+  service:
+    vgroup-mapping:
+      user-manager-service-group: default
+      permission-service-group: default
+  registry:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      namespace: dev
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+
+
+### Feign 配置
+#feign:
+#  client:
+#    config:
+#      default:
+#        connect-timeout: 20000
+#        read-timeout: 120000
