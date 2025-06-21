@@ -1,6 +1,5 @@
 package com.code.permissionservice.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -9,7 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @TableName roles
  */
 @TableName(value ="roles")
-public class Roles {
+public class Role {
     /**
      * 角色id：1超管，2普通用户，3管理员
      */
@@ -60,7 +59,7 @@ public class Roles {
         if (getClass() != that.getClass()) {
             return false;
         }
-        Roles other = (Roles) that;
+        Role other = (Role) that;
         return (this.getRoleId() == null ? other.getRoleId() == null : this.getRoleId().equals(other.getRoleId()))
             && (this.getRoleCode() == null ? other.getRoleCode() == null : this.getRoleCode().equals(other.getRoleCode()));
     }

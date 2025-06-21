@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @TableName user_roles
  */
 @TableName(value ="user_roles")
-public class UserRoles {
+public class UserRole {
     /**
      * 主键id
      */
@@ -78,7 +78,7 @@ public class UserRoles {
         if (getClass() != that.getClass()) {
             return false;
         }
-        UserRoles other = (UserRoles) that;
+        UserRole other = (UserRole) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
             && (this.getRoleId() == null ? other.getRoleId() == null : this.getRoleId().equals(other.getRoleId()));

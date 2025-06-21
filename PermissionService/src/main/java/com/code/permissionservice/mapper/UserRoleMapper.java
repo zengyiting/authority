@@ -1,6 +1,6 @@
 package com.code.permissionservice.mapper;
 
-import com.code.permissionservice.model.entity.UserRoles;
+import com.code.permissionservice.model.entity.UserRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @Entity com.code.permissionservice.model.entity.UserRoles
 */
 @Mapper
-public interface UserRolesMapper extends BaseMapper<UserRoles> {
+public interface UserRoleMapper extends BaseMapper<UserRole> {
 
 }
 
