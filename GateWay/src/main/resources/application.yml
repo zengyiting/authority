@@ -1,0 +1,46 @@
+server:
+  port: 10011
+
+spring:
+  application:
+    name: GateWay
+  redis:
+    host: 192.168.253.153
+    port: 6379
+    password: 2004zyta
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      discovery:
+        namespace: dev
+        group:  authority
+    profiles:
+      active: dev
+    gateway:
+      httpclient:
+        connect-timeout: 60000 # 连接超时时间，单位毫秒
+        response-timeout: 60000 # 响应超时时间，单位毫秒
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedMethods:
+              - "GET"
+              - "POST"
+              - "PUT"
+              - "DELETE"
+              - "OPTIONS"
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 36000
+      routes:
+        - id: PermissionService
+          uri: lb://PermissionService
+          predicates:
+            - Path=/api/permission/**
+        - id: UserManagerService
+          uri: lb://UserManagerService
+          predicates:
+            - Path=/api/u1/**
