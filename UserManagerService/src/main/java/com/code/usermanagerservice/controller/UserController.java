@@ -1,8 +1,7 @@
 package com.code.usermanagerservice.controller;
 
 import com.code.usermanagerservice.common.Result;
-import com.code.usermanagerservice.model.dto.UserRegisterRequest;
-import com.code.usermanagerservice.model.dto.UserSmsRequest;
+import com.code.usermanagerservice.model.dto.*;
 import com.code.usermanagerservice.service.UsersService;
 import com.code.usermanagerservice.utils.IpUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/u1/user")
 public class UserController {
     @Autowired
     private UsersService usersService;
@@ -31,6 +30,17 @@ public class UserController {
         usersService.register(registerRequest);
         log.info("用户{}注册成功，来自{}",registerRequest.getUsername(),ip);
         return Result.success("注册成功");
+    }
+    @PostMapping("/login")
+    public Result<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest request){
+       UserLoginResponse userLoginResponse = usersService.login(request);
+       log.info("用户{}登录成功，来自{}",request.getUsername());
+       return Result.success(userLoginResponse);
+    }
+    @PostMapping("/refresh")
+    public Result<RefreshTokenResponse> refresh(@RequestHeader("Authorization") String refreshToken){
+        RefreshTokenResponse refreshTokenResponse =  usersService.refresh(refreshToken);
+        return Result.success(refreshTokenResponse);
     }
 
 

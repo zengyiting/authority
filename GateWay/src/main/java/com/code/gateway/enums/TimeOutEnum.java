@@ -1,4 +1,4 @@
-package com.code.usermanagerservice.enums;
+package com.code.gateway.enums;
 
 public enum TimeOutEnum {
     CODE_TIME_OUT("code time out(minute)", 5L),

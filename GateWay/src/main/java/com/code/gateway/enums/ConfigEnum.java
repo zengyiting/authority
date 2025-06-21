@@ -1,4 +1,4 @@
-package com.code.usermanagerservice.enums;
+package com.code.gateway.enums;
 
 public enum ConfigEnum {
     WORKED_ID("workedId", "1"),
