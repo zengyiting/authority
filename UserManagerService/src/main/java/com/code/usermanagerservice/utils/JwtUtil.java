@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
+/**
+ * JWT 工具类,用的以前项目的工具类，但有地方需要修改，直接借助了ai完成
+ */
 @Slf4j
 public final class JwtUtil {
 
