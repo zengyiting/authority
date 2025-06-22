@@ -93,7 +93,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
             throw new BusinessException(ErrorEnum.BIND_ERROR.getMessage());
         }
         UserPhoneIndex PhoneIndex= new UserPhoneIndex();
-        userPhoneIndex.setPhone(userRegisterRequest.getPhone());
+        userPhoneIndex.setPhone(phone);
         userPhoneIndex.setUserId(user.getUserId());
         int insert1 = userPhoneIndexMapper.insert(userPhoneIndex);
         if (insert1 == 0) {
