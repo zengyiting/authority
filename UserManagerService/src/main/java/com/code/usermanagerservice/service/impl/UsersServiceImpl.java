@@ -366,6 +366,15 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
             user.setPassword(encodedPassword);
             usersMapper.updateById(user);
             log.info("用户重置密码成功");
+            LogSaveRequest logUserSaveRequest = new LogSaveRequest();
+            logUserSaveRequest.setUserId(userId);
+            logUserSaveRequest.setAction("重置密码");
+            logUserSaveRequest.setIp(ip);
+            Map<String, String> detail = new HashMap<>();
+            detail.put("filed", "password");
+            detail.put("new", encodedPassword);
+            logUserSaveRequest.setDetail(JSON.toJSONString(detail));
+            rabbitTemplate.convertAndSend(ConfigEnum.EXCHANGE_NAME.getValue(), ConfigEnum.ROUTING_KEY.getValue(), logUserSaveRequest);
             return;
         }
         List<Long> userIdList = new ArrayList<>();
