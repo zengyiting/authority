@@ -92,10 +92,10 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
         if (!bindSuccess) {
             throw new BusinessException(ErrorEnum.BIND_ERROR.getMessage());
         }
-        UserPhoneIndex PhoneIndex= new UserPhoneIndex();
-        userPhoneIndex.setPhone(phone);
-        userPhoneIndex.setUserId(user.getUserId());
-        int insert1 = userPhoneIndexMapper.insert(userPhoneIndex);
+        UserPhoneIndex phoneIndex= new UserPhoneIndex();
+        phoneIndex.setPhone(phone);
+        phoneIndex.setUserId(user.getUserId());
+        int insert1 = userPhoneIndexMapper.insert(phoneIndex);
         if (insert1 == 0) {
             throw new BusinessException(ErrorEnum.MYSQL_ERROR.getMessage());
         }
