@@ -304,6 +304,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
         }
 
         if (!Objects.equals(user.getPhone(), userInfoDto.getPhone())) {
+            UserPhoneIndex  userPhoneIndex = userPhoneIndexMapper.selectById(user.getPhone());
+            userPhoneIndex.setPhone(userInfoDto.getPhone());
+            userPhoneIndexMapper.updateById(userPhoneIndex);
             detailList.add(safeMap("phone", user.getPhone(), userInfoDto.getPhone()));
             user.setPhone(userInfoDto.getPhone());
         }
