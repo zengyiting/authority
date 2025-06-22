@@ -8,6 +8,9 @@ public enum ErrorEnum {
     USER_PASSWORD_ERROR("用户密码错误"),
     USER_DISABLED("用户被禁用"),
     GET_ROLE_ERROR("获取用户角色失败"),
+    USER_ID_NOT_NULL("用户ID不能为空"),
+    TARGET_USER_ID_NOT_NULL("目标用户ID不能为空"),
+    FORBIDDEN("权限不足"),
     USER_NOT_EXIST("用户不存在");
 
     private final String message;

@@ -39,7 +39,7 @@ spring:
         - id: PermissionService
           uri: lb://PermissionService
           predicates:
-            - Path=/api/permission/**
+            - Path=/api/p1/**
         - id: UserManagerService
           uri: lb://UserManagerService
           predicates:

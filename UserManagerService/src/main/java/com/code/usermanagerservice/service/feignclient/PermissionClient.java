@@ -9,16 +9,16 @@ import java.util.List;
 
 @FeignClient("PermissionService")
 public interface PermissionClient {
-    @PostMapping("/permission/default")
+    @PostMapping("/api/p1/default")
     boolean bindDefaultRole (@RequestParam("userId")Long userId);
-    @PostMapping("/permission/getRoleCode")
+    @PostMapping("/api/p1/getRoleCode")
     int getUserRoleCode (@RequestParam("userId")Long userId);
-    @PostMapping("/permission/upgrade")
+    @PostMapping("/api/p1/upgrade")
     public boolean upgradeToAdmin(@RequestParam Long userId);
-    @PostMapping("permission/downgrade")
+    @PostMapping("/api/p1/downgrade")
     public boolean downgradeToUser(@RequestParam Long userId);
-    @GetMapping ("permission/getUserRoleCodeList")
+    @GetMapping ("/api/p1/getUserRoleCodeList")
     public List<Long> getUserRoleCodeList(@RequestParam Long userId);
-    @GetMapping("permission/getAllRoleCodeList")
+    @GetMapping("/api/p1/getAllRoleCodeList")
     public List<Long> getAllRoleCodeList(@RequestParam Long userId);
 }
