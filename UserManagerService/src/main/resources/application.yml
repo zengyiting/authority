@@ -73,10 +73,15 @@ spring:
     port: 6379
     password: 2004zyta
   rabbitmq:
-    host: 192.168.253.153       # 或你的RabbitMQ地址
-    port: 5672
+    host: 192.168.253.153
     username: guest
     password: guest
+    listener:
+      simple:
+        acknowledge-mode: manual
+        retry:
+          enabled: true
+          initial-interval: 1000ms
 
 seata:
   enabled: true
@@ -97,10 +102,4 @@ seata:
       password: nacos
 
 
-### Feign 配置
-#feign:
-#  client:
-#    config:
-#      default:
-#        connect-timeout: 20000
-#        read-timeout: 120000
+

@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import cn.hutool.core.lang.Snowflake;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
 @Service
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
         implements UsersService {
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
     @Autowired
