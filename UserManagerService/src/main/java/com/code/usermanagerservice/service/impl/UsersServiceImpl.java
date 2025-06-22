@@ -97,6 +97,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
         logSaveRequest.setAction(ActionEnum.REGISTER.getAction());
         logSaveRequest.setIp(userRegisterRequest.getIp());
         logSaveRequest.setDetail("用户注册成功");
+        log.info("用户{}注册成功，来自{}",userRegisterRequest.getUsername(),userRegisterRequest.getIp());
         rabbitTemplate.convertAndSend(ConfigEnum.EXCHANGE_NAME.getValue(), ConfigEnum.ROUTING_KEY.getValue(), logSaveRequest);
     }
 
@@ -176,7 +177,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
     }
 
     @Override
-    public UserInfoDto getUserInfoList(Long myUserId, Long userId) {
+    public UserInfoDto getUserInfo(Long myUserId, Long userId) {
         if (myUserId == null) {
             throw new BusinessException(ErrorEnum.USER_ID_NOT_NULL.getMessage());
         }
@@ -209,6 +210,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
                 throw new BusinessException(ErrorEnum.FORBIDDEN.getMessage());
             }
         }
+        log.info("获取用户信息成功：{}", userInfoDto);
         return userInfoDto;
 
 
@@ -320,6 +322,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
             logSaveRequest.setIp(ip);
             logSaveRequest.setDetail(JSON.toJSONString(detailList));
             rabbitTemplate.convertAndSend(ConfigEnum.EXCHANGE_NAME.getValue(), ConfigEnum.ROUTING_KEY.getValue(), logSaveRequest);
+            log.info("发送日志成功");
         }
     }//部分通过ai修复，因为多处地方需要进行同样的修改，直接让ai代做了，修改后我进行审核后无误。
 

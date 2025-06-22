@@ -23,7 +23,7 @@ public interface UsersService extends IService<User> {
 
     public RefreshTokenResponse refresh(String refreshToken);
 
-    public UserInfoDto getUserInfoList(Long myUserId, Long userId);
+    public UserInfoDto getUserInfo(Long myUserId, Long userId);
 
     public PageResult<UserInfoDto> getUserList(UserPageRequest userPageRequest, Long userId);
 
