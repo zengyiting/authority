@@ -49,10 +49,18 @@ public class UserRolServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
     }
 
     @Override
-    public boolean upgradeToAdmin(Long userId) {
+    public boolean upgradeToAdmin(Long userId,Long myUserId,String ip) {
         if(userId == null){
             return false;
         }
+        if(myUserId == null){
+            return false;
+        }
+        int myRoleCode = getUserRoleCode(myUserId);
+        if (myRoleCode != RoleEnum.SUPER_ADMIN.getCode()){
+            return false;
+        }
+
         UserRole userRole = userRoleMapper.selectOne(new QueryWrapper<UserRole>().eq("user_id", userId));
         if(userRole == null){
             return false;
@@ -62,11 +70,23 @@ public class UserRolServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
     }
 
     @Override
-    public boolean downgradeToUser(Long userId) {
+    public boolean downgradeToUser(Long userId,Long myUserId,String ip) {
         if(userId == null){
             return false;
         }
+        if (myUserId == null){
+            return false;
+        }
+        int myUserRoleCode = getUserRoleCode(myUserId);
+        if(myUserRoleCode != RoleEnum.SUPER_ADMIN.getCode()){
+            return false;
+        }
+        int userRoleCode = getUserRoleCode(userId);
+        if(userRoleCode != RoleEnum.ADMIN.getCode()){
+            return false;
+        }
         UserRole userRole = userRoleMapper.selectOne(new QueryWrapper<UserRole>().eq("user_id", userId));
+
         if(userRole == null){
             return false;
         }

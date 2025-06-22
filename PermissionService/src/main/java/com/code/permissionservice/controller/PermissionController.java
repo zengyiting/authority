@@ -1,13 +1,16 @@
 package com.code.permissionservice.controller;
 
+import com.code.permissionservice.Utils.IpUtil;
+import com.code.permissionservice.common.Result;
 import com.code.permissionservice.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/permission")
+@RequestMapping("/api/p1")
 public class PermissionController {
     @Autowired
     private UserRoleService userRoleService;
@@ -21,12 +24,24 @@ public class PermissionController {
         return userRoleService.getUserRoleCode(userId);
     }
     @PostMapping("/upgrade")
-    public boolean upgradeToAdmin(@RequestParam Long userId) {
-        return userRoleService.upgradeToAdmin(userId);
+    public Result<String> upgradeToAdmin(@RequestParam Long userId,HttpServletRequest request) {
+        String ip = IpUtil.getClientIp(request);
+        String myUserId = request.getHeader("X-User-Id");
+       if(userRoleService.upgradeToAdmin(userId,Long.valueOf(myUserId),ip)){
+           return Result.success("升级成功");
+       }else {
+           return Result.fail("升级失败");
+       }
     }
     @PostMapping("/downgrade")
-    public boolean downgradeToUser(@RequestParam Long userId) {
-        return userRoleService.downgradeToUser(userId);
+    public Result<String> downgradeToUser(@RequestParam Long userId, HttpServletRequest request) {
+        String myUserId = request.getHeader("X-User-Id");
+        String ip = IpUtil.getClientIp(request);
+        if(userRoleService.downgradeToUser(userId,Long.parseLong(myUserId),ip)){
+            return Result.success("降级成功");
+        }else {
+            return Result.fail("降级失败");
+        }
     }
     @GetMapping("/getUserRoleCodeList")
     public List<Long> getUserRoleCodeList(@RequestParam Long userId) {

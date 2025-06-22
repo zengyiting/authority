@@ -14,10 +14,10 @@ public interface UserRoleService extends IService<UserRole> {
     public boolean bindDefaultRole(Long userId);
     public int getUserRoleCode(Long userId);
     // 超管调用：升级用户为管理员
-    public boolean upgradeToAdmin(Long userId);
+    public boolean upgradeToAdmin(Long userId,Long myUserId,String ip);
 
     // 超管调用：降级用户为普通角色
-    public boolean downgradeToUser(Long userId);
+    public boolean downgradeToUser(Long userId,Long myUserId,String ip);
     public List<Long> getUserRoleCodeList(Long userId);
     public List<Long> getAllRoleCodeList(Long userId );
 }
