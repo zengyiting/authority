@@ -92,11 +92,19 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
         if (!bindSuccess) {
             throw new BusinessException(ErrorEnum.BIND_ERROR.getMessage());
         }
+        UserPhoneIndex phoneIndex= new UserPhoneIndex();
+        phoneIndex.setPhone(phone);
+        phoneIndex.setUserId(user.getUserId());
+        int insert1 = userPhoneIndexMapper.insert(phoneIndex);
+        if (insert1 == 0) {
+            throw new BusinessException(ErrorEnum.MYSQL_ERROR.getMessage());
+        }
         LogSaveRequest logSaveRequest = new LogSaveRequest();
         logSaveRequest.setUserId(user.getUserId());
         logSaveRequest.setAction(ActionEnum.REGISTER.getAction());
         logSaveRequest.setIp(userRegisterRequest.getIp());
         logSaveRequest.setDetail("用户注册成功");
+        log.info("用户{}注册成功，来自{}",userRegisterRequest.getUsername(),userRegisterRequest.getIp());
         rabbitTemplate.convertAndSend(ConfigEnum.EXCHANGE_NAME.getValue(), ConfigEnum.ROUTING_KEY.getValue(), logSaveRequest);
     }
 
@@ -176,7 +184,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
     }
 
     @Override
-    public UserInfoDto getUserInfoList(Long myUserId, Long userId) {
+    public UserInfoDto getUserInfo(Long myUserId, Long userId) {
         if (myUserId == null) {
             throw new BusinessException(ErrorEnum.USER_ID_NOT_NULL.getMessage());
         }
@@ -209,6 +217,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
                 throw new BusinessException(ErrorEnum.FORBIDDEN.getMessage());
             }
         }
+        log.info("获取用户信息成功：{}", userInfoDto);
         return userInfoDto;
 
 
@@ -295,6 +304,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
         }
 
         if (!Objects.equals(user.getPhone(), userInfoDto.getPhone())) {
+            UserPhoneIndex  userPhoneIndex = userPhoneIndexMapper.selectById(user.getPhone());
+            userPhoneIndex.setPhone(userInfoDto.getPhone());
+            userPhoneIndexMapper.updateById(userPhoneIndex);
             detailList.add(safeMap("phone", user.getPhone(), userInfoDto.getPhone()));
             user.setPhone(userInfoDto.getPhone());
         }
@@ -320,6 +332,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
             logSaveRequest.setIp(ip);
             logSaveRequest.setDetail(JSON.toJSONString(detailList));
             rabbitTemplate.convertAndSend(ConfigEnum.EXCHANGE_NAME.getValue(), ConfigEnum.ROUTING_KEY.getValue(), logSaveRequest);
+            log.info("发送日志成功");
         }
     }//部分通过ai修复，因为多处地方需要进行同样的修改，直接让ai代做了，修改后我进行审核后无误。
 
@@ -353,6 +366,15 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, User>
             user.setPassword(encodedPassword);
             usersMapper.updateById(user);
             log.info("用户重置密码成功");
+            LogSaveRequest logUserSaveRequest = new LogSaveRequest();
+            logUserSaveRequest.setUserId(userId);
+            logUserSaveRequest.setAction("重置密码");
+            logUserSaveRequest.setIp(ip);
+            Map<String, String> detail = new HashMap<>();
+            detail.put("filed", "password");
+            detail.put("new", encodedPassword);
+            logUserSaveRequest.setDetail(JSON.toJSONString(detail));
+            rabbitTemplate.convertAndSend(ConfigEnum.EXCHANGE_NAME.getValue(), ConfigEnum.ROUTING_KEY.getValue(), logUserSaveRequest);
             return;
         }
         List<Long> userIdList = new ArrayList<>();

@@ -25,9 +25,9 @@ public class UserManageController {
     @Autowired
     private UsersService usersService;
     @GetMapping("/{userId}")
-    public Result<UserInfoDto> getUsers(@PathVariable Long userId,HttpServletRequest request) {
+    public Result<UserInfoDto> getUserInfo(@PathVariable Long userId,HttpServletRequest request) {
         String myUserId = request.getHeader("X-User-Id");
-        UserInfoDto userInfoDtoList = usersService.getUserInfoList(Long.valueOf(myUserId),userId);
+        UserInfoDto userInfoDtoList = usersService.getUserInfo(Long.valueOf(myUserId),userId);
         return Result.success(userInfoDtoList);
 
     }
@@ -52,6 +52,7 @@ public class UserManageController {
         String userId = request.getHeader("X-User-Id");
         resetPasswordRequest.setIp(ip);
         usersService.resetPassword(Long.valueOf(userId),resetPasswordRequest);
+
         return Result.success("密码重置成功");
     }
 
