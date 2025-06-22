@@ -2,11 +2,13 @@ package com.code.permissionservice.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 /**
  * 
  * @TableName user_roles
  */
+@Data
 @TableName(value ="user_roles")
 public class UserRole {
     /**
